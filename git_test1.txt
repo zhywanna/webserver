@@ -1,8 +1,0 @@
-git_test1
-
-测试pull
-
-
-云端测试
-
-测试fetch
