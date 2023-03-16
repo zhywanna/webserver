@@ -67,8 +67,8 @@ int main(int argc, char* argv[]) {
     // 绑定
     struct sockaddr_in address;
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY; // 监听所有网卡
-    address.sin_port = htons(port);
+    address.sin_addr.s_addr = INADDR_ANY; // 绑定ip地址（一台机器有多个网卡，每个网卡都有自己的ip地址，这里表示监听所有网卡）
+    address.sin_port = htons(port); // 绑定端口号（当内核收到 TCP 报文，通过 TCP 头里面的端口号，来找到应用程序）
     bind(listenfd, (struct sockaddr*)&address, sizeof(address)); // listen套接字将要监听的是这个地址
 
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
     listen(listenfd, 5);
 
     // 创建epoll对象 IO 多路复用
-    epoll_event events[MAX_EVENT_NUM]; // ready list
+    epoll_event events[MAX_EVENT_NUM]; // ready list返回到用户态下的数组
     int epollfd = epoll_create(1); // 任意正数，不影响实际创建多大
 
     // 将监听的文件描述符添加

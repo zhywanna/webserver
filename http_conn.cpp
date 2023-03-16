@@ -109,7 +109,7 @@ void http_conn::close_conn() {
     }
 }
 
-// 非阻塞的读，一次性读完，循环读取直到无数据可读或对方断开
+// 如果是边缘触发就需要采用非阻塞的读，一次性读完，循环读取直到无数据可读或对方断开
 bool http_conn::read() {
     printf("*** 读取中 ***\n");
 
@@ -119,7 +119,7 @@ bool http_conn::read() {
 
     while (1)
     {
-        int read_len = recv(m_sockfd, &m_read_buf[m_read_idx], READ_BUFFER_SIZE - m_read_idx, 0);
+        int read_len = recv(m_sockfd, &m_read_buf[m_read_idx], READ_BUFFER_SIZE - m_read_idx, 0); // 最后的flag位置=0时和read效果几乎相同
         if (read_len == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 // 没有数据了
